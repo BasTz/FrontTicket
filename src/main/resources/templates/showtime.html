@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f1f1f1;
+    }
+
+    /* Create two columns/boxes that floats next to each other */
+    nav {
+      margin: unset;
+      padding: unset;
+      background-color: #797979;
+    }
+
+    /* Style the list inside the menu */
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #797979;
+    }
+
+    nav li {
+      float: left;
+      padding: 5px;
+    }
+    nav li:hover {
+      background-color: darkred;
+    }
+    nav li a {
+      display: block;
+      color: white;
+      text-align: center;
+      font-size: 18px;
+      padding: 20px 22px;
+      text-decoration: none;
+    }
+
+    nav li a:hover {
+      color: white;
+    }
+
+    article {
+      padding: 20px;
+      background-color: #f1f1f1;
+      text-align: -webkit-center;
+    }
+
+    /* Clear floats after the columns */
+    section::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+    @media (max-width: 600px) {
+      nav, article {
+        width: 100%;
+        height: auto;
+      }
+    }
+    .btn-default{
+      background-color: #f8f9fa;
+      border-color: #ddd;
+      color: #444;
+    }
+    .btn-default.hover, .btn-default:active, .btn-default:hover {
+      background-color: #e9ecef;
+      color: #2b2b2b;
+    }
+    #showtimestyle {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      min-width: 500px;
+    }
+
+    #showtimestyle td, #showtimestyle th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #showtimestyle tr:nth-child(even){background-color: #f2f2f2;}
+
+    #showtimestyle tr:hover {background-color: #ddd;}
+
+    #showtimestyle th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="row" style="width: 100%;margin: unset;">
+    <div class="col-2" style="margin: unset; background-color: #ffffff;color: red;text-align: -webkit-center;font-size: 1rem;">
+      <h3>Movie Ticket Reservation</h3>
+    </div>
+    <div class="col-2" style="background: linear-gradient(to bottom left, #797979 50%, #ffffff 50%);width: 130px;">
+    </div>
+    <div class="col-8" style="background: linear-gradient(to bottom left, #797979 50%, #ffffff 50%);display: inline;padding: 0;align-self: center;">
+      <ul>
+        <li><a href=/movie id="Test1">Movie</a></li>
+        <li><a href=/theater id="Test2">Theater</a></li>
+        <li><a href=/showtime id="Test3">Showtime</a></li>
+        <li><a href=/booking id="Test4">Booking</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="row">
+  <section>
+    <article id="Detail1">
+      <h1>Booking</h1>
+      <div th:if="${ not#lists.isEmpty(showtime)}">
+        <table id="showtimestyle">
+          <thead style="text-align: center;text-align-last: center;">
+          <tr>
+            <th>ID</th>
+            <th>Theater Name</th>
+            <th>Movie Name</th>
+            <th>Date Time</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="showtime : ${showtime}">
+            <td th:text="${showtime.id}"></td>
+            <td th:text="${showtime.theater.name}"></td>
+            <td th:text="${showtime.movie.name}"></td>
+            <td th:text="${#dates.format(showtime.datetime, 'dd/MM/yyyy HH:mm')}"></td>
+            <td><div class="btn btn-default btn-sm" style="width: 100%;padding: 5px;" th:value="${showtime.id}"><span class="far fa-edit"></span></div></td>
+          </tr>
+          <tr>
+            <td colspan="5" style="text-align: -webkit-center;"><div class="btn col-md-2" id="btn_add" style="background-color: #797979; padding:5px; margin-left:10px; color:white; width : 145px ;  font-size: 14px; font-weight: bold;">ADD</div></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+</div>
+</body>
+
+<script>
+  $(document).ready(function(){
+
+  });
+</script>
+</html>
