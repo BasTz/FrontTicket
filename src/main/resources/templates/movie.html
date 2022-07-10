@@ -82,22 +82,22 @@
             background-color: #e9ecef;
             color: #2b2b2b;
         }
-        #showtimestyle {
+        #moviesstyle {
             font-family: Arial, Helvetica, sans-serif;
             border-collapse: collapse;
             min-width: 500px;
         }
 
-        #showtimestyle td, #showtimestyle th {
+        #moviesstyle td, #moviesstyle th {
             border: 1px solid #ddd;
             padding: 8px;
         }
 
-        #showtimestyle tr:nth-child(even){background-color: #f2f2f2;}
+        #moviesstyle tr:nth-child(even){background-color: #f2f2f2;}
 
-        #showtimestyle tr:hover {background-color: #ddd;}
+        #moviesstyle tr:hover {background-color: #ddd;}
 
-        #showtimestyle th {
+        #moviesstyle th {
             padding-top: 12px;
             padding-bottom: 12px;
             text-align: left;
@@ -129,7 +129,7 @@
             <article id="Detail1">
                 <h1>Movie</h1>
                 <div th:if="${ not#lists.isEmpty(movies)}">
-                    <table id="movies">
+                    <table id="moviesstyle">
                         <thead style="text-align: center;text-align-last: center;">
                             <tr>
                                 <th>ID</th>

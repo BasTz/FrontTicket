@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -73,15 +74,6 @@
         height: auto;
       }
     }
-    .btn-default{
-      background-color: #f8f9fa;
-      border-color: #ddd;
-      color: #444;
-    }
-    .btn-default.hover, .btn-default:active, .btn-default:hover {
-      background-color: #e9ecef;
-      color: #2b2b2b;
-    }
     #showtimestyle {
       font-family: Arial, Helvetica, sans-serif;
       border-collapse: collapse;
@@ -104,10 +96,28 @@
       background-color: #04AA6D;
       color: white;
     }
+
+    #movielist{
+      margin-right: 50px;
+      display: block;
+      width: 40%;
+      height: calc(2.25rem + 2px);
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #495057;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+      box-shadow: inset 0 0 0 transparent;
+      transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
   </style>
 </head>
-<body>
-<nav>
+<body onload="loaddata()">
+<!--<nav>
   <div class="row" style="width: 100%;margin: unset;">
     <div class="col-2" style="margin: unset; background-color: #ffffff;color: red;text-align: -webkit-center;font-size: 1rem;">
       <h3>Movie Ticket Reservation</h3>
@@ -123,12 +133,20 @@
       </ul>
     </div>
   </div>
-</nav>
+</nav>-->
 <div class="row">
   <section>
     <article id="Detail1">
-      <h1>Booking</h1>
-      <div th:if="${ not#lists.isEmpty(showtime)}">
+      <h1>Showtime</h1><br>
+      <div style="display: inline-flex;width: 50%;place-content: center;">
+        <select name="movielist" id="movielist" >
+          <option></option>
+          <option th:each="movies : ${movies}" th:text="${movies.name}" th:value="${movies.id}"></option>
+        </select>
+        <div onclick="getMovie()" class="btn col-md-2" id="btn_search" style="background-color: #797979; padding:5px; margin-left:10px; color:white; width : 145px ;  font-size: 14px; font-weight: bold;">SEARCH</div>
+      </div>
+      <div class="row"><br></div>
+      <div>
         <table id="showtimestyle">
           <thead style="text-align: center;text-align-last: center;">
           <tr>
@@ -136,19 +154,19 @@
             <th>Theater Name</th>
             <th>Movie Name</th>
             <th>Date Time</th>
-            <th></th>
           </tr>
           </thead>
-          <tbody>
+          <tbody th:if="${ not#lists.isEmpty(showtime)}">
           <tr th:each="showtime : ${showtime}">
             <td th:text="${showtime.id}"></td>
             <td th:text="${showtime.theater.name}"></td>
             <td th:text="${showtime.movie.name}"></td>
             <td th:text="${#dates.format(showtime.datetime, 'dd/MM/yyyy HH:mm')}"></td>
-            <td><div class="btn btn-default btn-sm" style="width: 100%;padding: 5px;" th:value="${showtime.id}"><span class="far fa-edit"></span></div></td>
           </tr>
-          <tr>
-            <td colspan="5" style="text-align: -webkit-center;"><div class="btn col-md-2" id="btn_add" style="background-color: #797979; padding:5px; margin-left:10px; color:white; width : 145px ;  font-size: 14px; font-weight: bold;">ADD</div></td>
+          </tbody>
+          <tbody th:if="${#lists.isEmpty(showtime)}">
+          <tr style="text-align: -webkit-center;">
+            <td colspan="4">No Showtime on today</td>
           </tr>
           </tbody>
         </table>
@@ -162,5 +180,19 @@
   $(document).ready(function(){
 
   });
+  function loaddata(){
+    var movielist = sessionStorage.getItem("movielist");
+    $("#movielist").val(movielist).change();
+  }
+  function getMovie(){
+    if($("#movielist").val() === ''){
+      var URL = 'http://localhost:8090/showtime';
+    }
+    else{
+      var URL = 'http://localhost:8090/showtimebyid/' + $("#movielist").val();
+    }
+    sessionStorage.setItem("movielist", $("#movielist").val());
+    window.location.href = URL;
+  }
 </script>
 </html>

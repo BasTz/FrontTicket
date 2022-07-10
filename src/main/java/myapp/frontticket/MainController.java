@@ -6,14 +6,13 @@ import Model.Showtime;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 public class MainController {
@@ -30,13 +29,6 @@ public class MainController {
         assert movies != null;
         Collections.addAll(movieList, movies);
 
-        /*String test = "";
-        for (Movie movie:movies) {
-            String temp = "<td style=\"border: 1px solid;\">" + movie.getId() +"</td>";
-            temp += "<td style=\"border: 1px solid;\">" + movie.getName() +"</td>";
-            test += "<tr>" + temp + "</tr>";
-        }*/
-
         model.addAttribute("movies",movieList);
         return "movie";
     }
@@ -52,36 +44,69 @@ public class MainController {
         assert customers != null;
         List<Customer> customerList = new ArrayList<>(Arrays.asList(customers));
 
-        /*String test = "";
-        for (Movie movie:movies) {
-            String temp = "<td style=\"border: 1px solid;\">" + movie.getId() +"</td>";
-            temp += "<td style=\"border: 1px solid;\">" + movie.getName() +"</td>";
-            test += "<tr>" + temp + "</tr>";
-        }*/
-
         model.addAttribute("customer",customerList);
         return "booking";
     }
 
     @RequestMapping(value = "/showtime",method = RequestMethod.GET)
     public String ShowtimeController(ModelMap model){
-        final String uri = "http://localhost:8080/showtime";
+        final String urishowtime = "http://localhost:8080/showtime";
+        final String urimovie = "http://localhost:8080/movie";
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Showtime[]> response = restTemplate.getForEntity(uri, Showtime[].class);
+        ResponseEntity<Showtime[]> response = restTemplate.getForEntity(urishowtime, Showtime[].class);
         Showtime[] showtimes = response.getBody();
 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        List<Showtime> showtimeList = new ArrayList<>();
         assert showtimes != null;
-        List<Showtime> showtimeList = new ArrayList<>(Arrays.asList(showtimes));
+        for (Showtime showtime:showtimes) {
+            if (formatter.format(showtime.getDatetime()).equals(formatter.format(date))) {
+                showtimeList.add(showtime);
+            }
+        }
 
-        /*String test = "";
-        for (Movie movie:movies) {
-            String temp = "<td style=\"border: 1px solid;\">" + movie.getId() +"</td>";
-            temp += "<td style=\"border: 1px solid;\">" + movie.getName() +"</td>";
-            test += "<tr>" + temp + "</tr>";
-        }*/
+        ResponseEntity<Movie[]> response1 = restTemplate.getForEntity(urimovie, Movie[].class);
+        Movie[] movies = response1.getBody();
+
+        List<Movie> movieList = new ArrayList<>();
+        assert movies != null;
+        Collections.addAll(movieList, movies);
 
         model.addAttribute("showtime",showtimeList);
+        model.addAttribute("movies",movieList);
+        return "showtime";
+    }
+
+    @RequestMapping(value = "/showtimebyid/{id}",method = RequestMethod.GET)
+    public String ShowtimeByID(@PathVariable int id,ModelMap model){
+        final String uricustomerbyshowtime = "http://localhost:8080/showtimebymovie/" + id;
+        final String urimovie = "http://localhost:8080/movie";
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Showtime[]> response = restTemplate.getForEntity(uricustomerbyshowtime, Showtime[].class);
+        Showtime[] showtimebyid = response.getBody();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        List<Showtime> showtimeList = new ArrayList<>();
+        assert showtimebyid != null;
+        for (Showtime showtime:showtimebyid) {
+            if (formatter.format(showtime.getDatetime()).equals(formatter.format(date))) {
+                showtimeList.add(showtime);
+            }
+        }
+
+        ResponseEntity<Movie[]> response1 = restTemplate.getForEntity(urimovie, Movie[].class);
+        Movie[] movies = response1.getBody();
+
+        List<Movie> movieList = new ArrayList<>();
+        assert movies != null;
+        Collections.addAll(movieList, movies);
+
+        model.addAttribute("showtime",showtimeList);
+        model.addAttribute("movies",movieList);
         return "showtime";
     }
 }
