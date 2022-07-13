@@ -19,6 +19,6 @@ docker run --net ticket-api --name frontticket -p 8090:8090 -it ghcr.io/bastz/fr
 
 #### Link to access Showtime webpage
 ```
-http://localhost:8080/showtime
+http://localhost:8090/showtime
 ```
 
